@@ -1,6 +1,7 @@
 /*Customer part*/
 
 generateId();
+addDataToTable();
 
 $("#btnCustomerAdd").click(function (){
 
@@ -60,14 +61,27 @@ $("#clearBtn").click(function (){
 
 function addDataToTable(){
     $("#tblcstmr").empty();
-    for (var i of customerDB){
+    $.ajax({
+       url:"http://localhost:8080/BackEnd/customer?option=GetAll",
+        method:"GET",
+        success:function (resp) {
+          for (const customer of resp.data){
+              let raw = `<tr><td>${customer.id}</td><td>${customer.name}</td><td>${customer.address}</td><td>${customer.salary}</td></tr>`
+              $("#tblcstmr").append(raw);
+
+              bindCustomer();
+              deleteCustomer();
+          }
+        }
+    });
+ /*   for (var i of customerDB){
 
         let raw = `<tr><td>${i.getCustomerId()}</td><td>${i.getCustomerName()}</td><td>${i.getCustomerAddress()}</td><td>${i.getCustomerSalary()}</td></tr>`
         $("#tblcstmr").append(raw);
 
         bindCustomer();
         deleteCustomer();
-    }
+    }*/
 }
 
 function clearField(){
