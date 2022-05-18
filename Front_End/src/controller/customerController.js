@@ -66,6 +66,18 @@ $("#updateCustomerBtn").click(function (){
 function deleteCustomer (){
     $("#deleteCustomerBtn").click(function (){
         let getClickData=$("#Id").val();
+        $.ajax({
+            url:`http://localhost:8080/BackEnd/customer?customerID=${getClickData}`,
+            method:"DELETE",
+            success:function (resp){
+                if (resp.status==200){
+                    addDataToTable();
+                }else{
+                    alert(resp.data);
+                }
+            }
+        });
+        /*let getClickData=$("#Id").val();
         for (let i=0;i<customerDB.length;i++){
             if (customerDB[i].getCustomerId()==getClickData){
                 customerDB.splice(i, 1);
@@ -73,7 +85,7 @@ function deleteCustomer (){
         }
         clearField();
         addDataToTable();
-        generateId();
+        generateId();*/
     });
 }
 
