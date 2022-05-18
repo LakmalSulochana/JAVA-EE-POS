@@ -5,7 +5,29 @@ addDataToTable();
 
 $("#btnCustomerAdd").click(function (){
 
-    let customerId =$("#customerId").val();
+    $.ajax({
+      url:"http://localhost:8080/BackEnd/customer",
+        method:"POST",
+        data:$("#customerForm").serialize(),
+        success:function (resp){
+          if (resp.status==200){
+              addDataToTable();
+             /* clearField();
+              generateId();
+              deleteCustomer();*/
+          }else{
+              alert(resp.data)
+          }
+        },
+        error:function (ob,textStatus,error){
+          console.log(ob);
+          console.log(textStatus);
+          console.log(error);
+
+        }
+    });
+
+   /* let customerId =$("#customerId").val();
     let customerName =$("#customerName").val();
     let customerAddress =$("#customerAddress").val();
     let customerSalary =$("#salary").val();
@@ -17,7 +39,7 @@ $("#btnCustomerAdd").click(function (){
     clearField();
     generateId();
     deleteCustomer();
-    loadAllCustomerIds()
+    loadAllCustomerIds()*/
 
 });
 
