@@ -12,9 +12,9 @@ $("#btnCustomerAdd").click(function (){
         success:function (resp){
           if (resp.status==200){
               addDataToTable();
-             /* clearField();
+             /*clearField();*/
               generateId();
-              deleteCustomer();*/
+              /*deleteCustomer();*/
           }else{
               alert(resp.data)
           }
@@ -154,7 +154,19 @@ function bindCustomer(){
 }
 /*ID GENARATE*/
 function generateId() {
-    let index = customerDB.length - 1;
+
+    $.ajax({
+       url:"http://localhost:8080/BackEnd/customer?option=GenId",
+       method:"GET",
+       success:function (resp){
+            if (resp.status==200){
+                $("#customerId").val(resp.data.id);
+            }else{
+                alert(resp.data)
+            }
+       }
+    });
+   /* let index = customerDB.length - 1;
     let id;
     let temp;
     if (index != -1) {
@@ -171,7 +183,7 @@ function generateId() {
         $("#customerId").val("C00-0" + temp);
     } else {
         $("#customerId").val("C00-" + temp);
-    }
+    }*/
 
 }
 
