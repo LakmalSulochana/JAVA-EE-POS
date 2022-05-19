@@ -1,10 +1,35 @@
 /*item Part*/
 
 generatItemeId()
+addItemDataToTable();
+
 $("#btnItemSave").click(function (){
     $("#tblItem>tr").off("click");
+    $.ajax({
+        url:"http://localhost:8080/BackEnd/item",
+        method:"POST",
+        data:$("#itemForm").serialize(),
+        success:function (resp){
+            if (resp.status==200){
+                addItemDataToTable();
+                clearField();
+                generateId();
+                /*deleteCustomer();*/
+            }else{
+                alert(resp.data)
+            }
+        },
+        error:function (ob,textStatus,error){
+            console.log(ob);
+            console.log(textStatus);
+            console.log(error);
 
-    let itemCode =$("#iCode").val();
+        }
+    });
+
+
+
+    /*let itemCode =$("#iCode").val();
     let itemName =$("#iName").val();
     let itemPrice =$("#iPrice").val();
     let itemQuantity =$("#iQuantity").val();
@@ -16,7 +41,7 @@ $("#btnItemSave").click(function (){
     clearItemField();
     generatItemeId();
     deleteItem();
-    loadAllItemIds()
+    loadAllItemIds()*/
 
 });
 
@@ -60,14 +85,29 @@ $("#btnItemClear").click(function (){
 
 function addItemDataToTable(){
     $("#tblItem").empty();
-    for (var i of itemDB){
+    $.ajax({
+        url:"http://localhost:8080/BackEnd/item?option=GetAll",
+        method:"GET",
+        success:function (resp) {
+            for (const item of resp.data){
+                let raw = `<tr><td>${item.itemId}</td><td>${item.itemName}</td><td>${item.itemPrice}</td><td>${item.qtyOnHand}</td></tr>`
+                $("#tblItem").append(raw);
+
+                bindItem();
+                deleteItem();
+
+            }
+        }
+    });
+
+   /* for (var i of itemDB){
 
         let raw = `<tr><td>${i.getItemCode()}</td><td>${i.getItemName()}</td><td>${i.getItemPrice()}</td><td>${i.getItemQuantity()}</td></tr>`
         $("#tblItem").append(raw);
 
         bindItem();
         deleteItem();
-    }
+    }*/6
 }
 function clearItemField(){
     $("#iCode,#ItemId,#iName,#ItemName,#iPrice,#ItemPrice,#iQuantity,#ItemQuantity").val("");
