@@ -27,7 +27,7 @@ $("#btnItemSave").click(function (){
         }
     });
 
-
+    generatItemeId();
 
     /*let itemCode =$("#iCode").val();
     let itemName =$("#iName").val();
@@ -39,7 +39,7 @@ $("#btnItemSave").click(function (){
     itemDB.push(itemOB);
     addItemDataToTable();
     clearItemField();
-    generatItemeId();
+
     deleteItem();
     loadAllItemIds()*/
 
@@ -144,7 +144,19 @@ function bindItem(){
 
 /*ID GENARATE*/
 function generatItemeId() {
-    let index = itemDB.length - 1;
+
+    $.ajax({
+        url:"http://localhost:8080/BackEnd/item?option=GenId",
+        method:"GET",
+        success:function (resp){
+            if (resp.status==200){
+                $("#iCode").val(resp.data.id);
+            }else{
+                alert(resp.data)
+            }
+        }
+    });
+    /*let index = itemDB.length - 1;
     let id;
     let temp;
     if (index != -1) {
@@ -161,7 +173,7 @@ function generatItemeId() {
         $("#iCode").val("I00-0" + temp);
     } else {
         $("#iCode").val("I00-" + temp);
-    }
+    }*/
 
 }
 

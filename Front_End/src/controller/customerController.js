@@ -44,7 +44,28 @@ $("#btnCustomerAdd").click(function (){
 });
 
 $("#updateCustomerBtn").click(function (){
-    let customerId =$("#Id").val();
+    var cusOb = {
+        id: $("#Id").val(),
+        name: $("#Name").val(),
+        address: $("#Address").val(),
+        salary: $("#customerSalary").val()
+    }
+    console.log("done")
+
+    $.ajax({
+        url: "http://localhost:8080/BackEnd/customer", method: "PUT", // contentType: "application/json",
+        data: JSON.stringify(cusOb), success: function (resp) {
+            if (resp.status == 200) {
+                addDataToTable();
+                clearField();   //Clear Input Fields
+            } else if (resp.status == 400) {
+                alert(resp.data);
+            }
+        }
+    });
+
+
+    /*let customerId =$("#Id").val();
     let customerName =$("#Name").val();
     let customerAddress =$("#Address").val();
     let customerSalary =$("#customerSalary").val();
@@ -60,7 +81,7 @@ $("#updateCustomerBtn").click(function (){
     addDataToTable();
     clearField();
     generateId();
-
+*/
 });
 
 function deleteCustomer (){

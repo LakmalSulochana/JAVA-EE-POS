@@ -106,6 +106,28 @@ public class ItemServlet extends HttpServlet {
 
                     writer.print(dataMsgBuilder.build());
                     break;
+
+                case "GenId":
+                    ResultSet rst = connection.prepareStatement("SELECT code FROM item ORDER BY code DESC LIMIT 1").executeQuery();
+                    if (rst.next()) {
+                        int tempId = Integer.parseInt(rst.getString(1).split("-")[1]);
+                        tempId+=1;
+                        if (tempId < 10) {
+                            objectBuilder.add("id", "I00-00" + tempId);
+                        } else if (tempId < 100) {
+                            objectBuilder.add("id", "I00-0" + tempId);
+                        } else if (tempId < 1000) {
+                            objectBuilder.add("id", "I00-" + tempId);
+                        }
+                    }else{
+                        objectBuilder.add("id", "I00-000");
+                    }
+                    dataMsgBuilder.add("data",objectBuilder.build());
+                    dataMsgBuilder.add("message","Done");
+                    dataMsgBuilder.add("status",200);
+                    writer.print(dataMsgBuilder.build());
+
+                    break;
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
