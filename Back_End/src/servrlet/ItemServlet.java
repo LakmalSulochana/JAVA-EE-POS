@@ -111,4 +111,40 @@ public class ItemServlet extends HttpServlet {
             throwables.printStackTrace();
         }
     }
+
+    @Override
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json");
+        String itemId = req.getParameter("itemId");
+        /*System.out.println("cus : " + " " + customerID);*/
+        JsonObjectBuilder dataMsgBuilder = Json.createObjectBuilder();
+        PrintWriter writer = resp.getWriter();
+
+        Connection connection = null;
+        try {
+            connection = ds.getConnection();
+            PreparedStatement pstm = connection.prepareStatement("DELETE FROM item WHERE code=?");
+            pstm.setObject(1, itemId);
+
+            if (pstm.executeUpdate() > 0) {
+                resp.setStatus(HttpServletResponse.SC_OK); //200
+                dataMsgBuilder.add("data", "");
+                dataMsgBuilder.add("massage", "item Deleted");
+                dataMsgBuilder.add("status", "200");
+                writer.print(dataMsgBuilder.build());
+            }
+        } catch (SQLException e) {
+            dataMsgBuilder.add("status", 400);
+            dataMsgBuilder.add("message", "Error");
+            dataMsgBuilder.add("data", e.getLocalizedMessage());
+            writer.print(dataMsgBuilder.build());
+            resp.setStatus(HttpServletResponse.SC_OK); //200
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

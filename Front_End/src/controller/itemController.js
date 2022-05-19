@@ -67,16 +67,30 @@ $("#btnUpdateItem").click(function (){
 });
 
 function deleteItem (){
-    $("#btnItemDelete").click(function (){
-        let getClickData=$("#ItemId").val();
+   $("#btnItemDelete").click(function (){
+
+       let getClickData=$("#ItemId").val();
+       $.ajax({
+           url:`http://localhost:8080/BackEnd/item?itemId=${getClickData}`,
+           method:"DELETE",
+           success:function (resp){
+               if (resp.status==200){
+                   addItemDataToTable();
+               }else{
+                   alert(resp.data);
+               }
+           }
+       });
+       clearItemField();
+       /* let getClickData=$("#ItemId").val();
         for (let i=0;i<itemDB.length;i++){
             if (itemDB[i].getItemCode()==getClickData){
                 itemDB.splice(i, 1);
             }
         }
-        clearItemField();
+
         addItemDataToTable();
-        generatItemeId();
+        generatItemeId();*/
     });
 }
 $("#btnItemClear").click(function (){
